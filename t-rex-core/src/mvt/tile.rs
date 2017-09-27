@@ -271,7 +271,7 @@ impl<'a> Tile<'a> {
 
     pub fn write_to(mut out: &mut Write, mvt_tile: &vector_tile::Tile) {
         let mut os = CodedOutputStream::new(&mut out);
-        let _ = mvt_tile.write_to(&mut os);
+        mvt_tile.write_to(&mut os).unwrap();
         os.flush().unwrap();
     }
 
@@ -279,10 +279,10 @@ impl<'a> Tile<'a> {
         let mut gz = GzEncoder::new(out, Compression::Default);
         {
             let mut os = CodedOutputStream::new(&mut gz);
-            let _ = mvt_tile.write_to(&mut os);
+            mvt_tile.write_to(&mut os).unwrap();
             os.flush().unwrap();
         }
-        let _ = gz.finish();
+        gz.finish().unwrap();
     }
 
     pub fn read_from(fin: &mut Read) -> Result<vector_tile::Tile, ProtobufError> {
